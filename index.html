@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encriptar y Desencriptar Texto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 800px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .input-section {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .input-box {
+      width: 100%;
+      height: 150px;
+      resize: none;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .button {
+      width: 120px;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .button-blue {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .button-blue:hover {
+      background-color: #0056b3;
+    }
+
+    .button-white {
+      background-color: #fff;
+      color: #333;
+    }
+
+    .button-white:hover {
+      background-color: #f0f0f0;
+    }
+
+    .output-section {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .output-box {
+      width: 100%;
+      height: 150px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      overflow-y: auto;
+    }
+
+    .copy-button {
+      width: 120px;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .copy-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ingrese el texto aquí</h1>
+
+    <div class="input-section">
+      <textarea id="inputText" class="input-box" placeholder="Introduzca su texto aquí"></textarea>
+
+      <div class="button-container">
+        <button class="button button-blue" onclick="encriptar()">Encriptar</button>
+        <button class="button button-white" onclick="desencriptar()">Desencriptar</button>
+      </div>
+    </div>
+
+    <div class="output-section">
+      <textarea id="outputText" class="output-box" placeholder="Texto encriptado o desencriptado"></textarea>
+    </div>
+
+    <button class="copy-button" onclick="copiarTexto()">Copiar</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script>
+    var clave = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e0f');
+    var iv = CryptoJS.enc.Hex.parse('101112131415161718191a1b1c1d1e1f');
+
+    function encriptar() {
+      var texto = document.getElementById('inputText').value.toLowerCase(); // Convertir a minúsculas
+      texto = texto.replace(/[^a-z]/g, ''); // Eliminar caracteres no permitidos
+      var textoEncriptado = CryptoJS.AES.encrypt(texto, clave, { iv: iv }).toString();
+      document.getElementById('outputText').value = textoEncriptado;
+    }
+
+    function desencriptar() {
+      var textoEncriptado = document.getElementById('outputText').value;
+      var bytes = CryptoJS.AES.decrypt(textoEncriptado, clave, { iv: iv });
+      var textoDesencriptado = bytes.toString(CryptoJS.enc.Utf8);
+      document.getElementById('outputText').value = textoDesencriptado;
+    }
+
+    function copiarTexto() {
+      var textoCopiado = document.getElementById('outputText');
+      textoCopiado.select();
+      document.execCommand('copy');
+    }
+  </script>
+</body>
+</html>
+
+
+
